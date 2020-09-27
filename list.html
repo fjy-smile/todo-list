@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>列表清单</title>
+	<link rel="stylesheet" href="lib/normalize.css">
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<div id="main">
+		<div class="navbar">
+			<h1>todo-list</h1>
+		</div>	
+		<div class="header">你今天学习了吗</div>
+		<form @submit.prevent="merge" id="task-form">
+			<div class="wrap">
+				<input v-model="current.title" 
+						id="task-input" type="input">
+				<div v-if="current.id" class="detail">
+					<textarea v-model="current.desc"></textarea>
+					<input v-model="current.alert_at" type="datetime-local">
+				</div>
+				<button type="submit">提交</button>
+			</div>
+		</form>
+		<div id="task-list">
+			<div class="wrap">
+				<h2>未完成</h2> 
+				<task :todo="todo"
+					v-if="!todo.completed" 
+					v-for="(todo,index) in useList"></task>
+				
+			</div>
+		</div>
+		<div id="task-list">
+			<div class="wrap">
+				<h2>已完成</h2>
+				<div v-if="todo.completed" 
+				v-for="(todo,index) in useList" class="item completed">
+					<button @click="toggle_complete(todo.id)" class="awbtn wbtn">x</button>
+					<p>{{todo.title}}</p>
+
+						<button @click="remove(todo.id)">删除</button>
+						<button @click="set_current(todo)">更新</button>
+
+				</div>
+			</div>
+		</div>
+		
+	</div>
+<template id="task-tpl">
+	<div  class="item">
+			<button @click="action('toggle_complete',todo.id)" class="awbtn abtn">√</button>
+			<p>{{todo.title}}</p>
+				<button @click="action('remove',todo.id)">删除</button>
+				<button @click="action('set_current',todo)">更新</button>
+				<button @click="action('toggle_detail',todo.id)">详情</button>
+
+			<div v-if="todo.show_detail" class="detail">
+				{{todo.desc||'暂无详情'}}
+			</div>
+	</div>
+</template>
+<audio id="alert-sound">
+	<source src="./sound/alert.mp3" >
+</audio>
+
+<script src="lib/vue.js"></script>
+<script src="js/myStorage.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
